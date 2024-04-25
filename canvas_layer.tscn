@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://cpbaawtvaoqcc"]
+
+[ext_resource type="Script" path="res://CanvasLayer.gd" id="1_b3cl0"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_b3cl0")
+
+[node name="Cohesion Button" type="CheckButton" parent="."]
+offset_left = 24.0
+offset_top = 47.0
+offset_right = 215.0
+offset_bottom = 100.0
+theme_override_font_sizes/font_size = 32
+text = "Cohesion"
+
+[node name="Seperation Button" type="CheckButton" parent="."]
+offset_left = 1.0
+offset_top = 98.0
+offset_right = 218.0
+offset_bottom = 151.0
+theme_override_font_sizes/font_size = 32
+text = "Seperation"
+
+[node name="Allignment Button" type="CheckButton" parent="."]
+offset_left = 3.0
+offset_top = 153.0
+offset_right = 219.0
+offset_bottom = 206.0
+theme_override_font_sizes/font_size = 32
+text = "Allignment"
+
+[connection signal="toggled" from="Cohesion Button" to="." method="_on_cohesion_button_toggled"]
+[connection signal="toggled" from="Seperation Button" to="." method="_on_seperation_button_toggled"]
+[connection signal="toggled" from="Allignment Button" to="." method="_on_allignment_button_toggled"]

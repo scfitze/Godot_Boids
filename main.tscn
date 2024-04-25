@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dnlaetyjcdf0o"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_2lt8t"]
+[ext_resource type="PackedScene" uid="uid://8wu08nin6ekr" path="res://boid.tscn" id="1_asr8a"]
+[ext_resource type="PackedScene" uid="uid://cim6v0wjmce14" path="res://barrier.tscn" id="3_kl3yg"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_2lt8t")
+boid_scene = ExtResource("1_asr8a")
+num_boids = 50
+is_seperation = true
+is_allignment = true
+is_cohesion = true
+
+[node name="barrier" parent="." instance=ExtResource("3_kl3yg")]
+position = Vector2(1854, 1061)
+
+[node name="barrier2" parent="." instance=ExtResource("3_kl3yg")]
+position = Vector2(654, 900)
