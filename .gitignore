@@ -16,3 +16,5 @@ data_*/
 *.md5
 .DS_Store
 .godot/editor/filesystem_cache8
+/.godot/editor
+/.godot/mono
