@@ -1,14 +1,15 @@
 [gd_scene load_steps=4 format=3 uid="uid://8wu08nin6ekr"]
 
-[ext_resource type="Texture2D" uid="uid://lkoxf7r833px" path="res://Boid.svg" id="1_e7641"]
-[ext_resource type="Script" path="res://boid.gd" id="1_jkckn"]
+[ext_resource type="Texture2D" uid="uid://lkoxf7r833px" path="res://assets/Boid.svg" id="1_e7641"]
+[ext_resource type="Script" path="res://scripts/boid.gd" id="1_grr5w"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hlg6h"]
 radius = 154.159
 
 [node name="Boid" type="Area2D"]
 position = Vector2(968, 576)
-script = ExtResource("1_jkckn")
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_grr5w")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_hlg6h")

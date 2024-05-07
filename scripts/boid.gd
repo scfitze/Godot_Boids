@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var speed = 500
+@export var speed = 600
 @export var max_angular_speed = 5
 var angular_speed = 0
 var screen_size
@@ -27,17 +27,11 @@ func _process(delta):
 			angular_speed += direction.angle_to(cohesion(boid_lst)) / delta
 		if is_allignment:
 			angular_speed += direction.angle_to(allignment(boid_lst)) / delta
-	angular_speed = clamp(angular_speed, -max_angular_speed, max_angular_speed)
+		angular_speed = clamp(angular_speed, -max_angular_speed, max_angular_speed)
 	var velocity = direction.normalized() * speed
 	rotation += angular_speed * delta
 	position += velocity * delta
 	angular_speed = 0
-	#if Input.is_action_pressed("ui_left"):
-		#angular_speed = -PI
-	#if Input.is_action_pressed("ui_right"):
-		#angular_speed = PI
-	#if Input.is_action_just_released("ui_left") or Input.is_action_just_released("ui_right"):
-		#angular_speed = 0
 		
 func set_rules(is_seperation, is_allignment, is_cohesion):
 	self.is_seperation = is_seperation
@@ -50,7 +44,8 @@ func set_max_angular_speed(max_angular_speed):
 func allignment(boid_lst):
 	var vec_sum = Vector2(0,0)
 	for boid in boid_lst:
-		vec_sum += Vector2(sin(boid.global_rotation), cos(boid.global_rotation))
+		if (is_in_view_angle(boid)):
+			vec_sum += Vector2(sin(boid.global_rotation), cos(boid.global_rotation))
 	vec_sum /= boid_lst.size()
 	vec_sum = vec_sum.normalized()
 	return vec_sum
@@ -59,8 +54,9 @@ func seperation(obj_lst):
 	var direction_vec = Vector2(0,0)
 	# Get vector from target to boid and divide by distance^2
 	for obj in obj_lst:
-		var steer_vec = Vector2(global_position.x - obj.global_position.x, global_position.y - obj.global_position.y)
-		direction_vec += steer_vec / steer_vec.length()**2
+		if (is_in_view_angle(obj)):
+			var steer_vec = Vector2(global_position.x - obj.global_position.x, global_position.y - obj.global_position.y)
+			direction_vec += steer_vec / steer_vec.length()**2
 	direction_vec /= obj_lst.size()
 	direction_vec = direction_vec.normalized()
 	return direction_vec
@@ -69,7 +65,8 @@ func cohesion(obj_lst):
 	var direction_vec = Vector2(0,0)
 	# Get vector from boid to target and divide by distance^2
 	for obj in obj_lst:
-		direction_vec += Vector2(obj.global_position.x - global_position.x, obj.global_position.y - global_position.y)
+		if(is_in_view_angle(obj)):
+			direction_vec += Vector2(obj.global_position.x - global_position.x, obj.global_position.y - global_position.y)
 	direction_vec /= obj_lst.size()
 	direction_vec = direction_vec.normalized()
 	return direction_vec
@@ -83,3 +80,11 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 		position.y = 0
 	if (position.y < 0):
 		position.y = screen_size.y
+
+func is_in_view_angle(boid):
+	var A = self.get_global_position()
+	var B = boid.get_global_position()
+	var AB = A.direction_to(B)
+	var fA = Vector2.UP.rotated(self.get_global_rotation())
+	return (AB.dot(fA) > 0)
+	
