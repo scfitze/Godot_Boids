@@ -18,3 +18,4 @@ data_*/
 .godot/editor/filesystem_cache8
 /.godot/editor
 /.godot/mono
+*.import
