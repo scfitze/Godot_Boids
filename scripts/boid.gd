@@ -1,4 +1,5 @@
 extends Area2D
+class_name Boid
 
 @export var speed = 600
 @export var max_angular_speed = 5
