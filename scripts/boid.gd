@@ -3,6 +3,13 @@ class_name Boid
 
 @export var speed = 600
 @export var max_angular_speed = 5
+# Separation only reacts to neighbours closer than this (in pixels)
+@export var separation_radius = 30
+# Proportional steering: angular speed (rad/s) = gain * weight * angle error (rad)
+@export var turn_gain = 4.0
+@export var separation_weight = 1.5
+@export var alignment_weight = 1.0
+@export var cohesion_weight = 0.8
 var angular_speed = 0
 var screen_size
 
@@ -23,11 +30,11 @@ func _process(delta):
 	var boid_lst = get_overlapping_areas()
 	if !boid_lst.is_empty():
 		if is_seperation:
-			angular_speed += direction.angle_to(seperation(boid_lst)) / delta
+			angular_speed += direction.angle_to(seperation(boid_lst)) * turn_gain * separation_weight
 		if is_cohesion:
-			angular_speed += direction.angle_to(cohesion(boid_lst)) / delta
+			angular_speed += direction.angle_to(cohesion(boid_lst)) * turn_gain * cohesion_weight
 		if is_allignment:
-			angular_speed += direction.angle_to(allignment(boid_lst)) / delta
+			angular_speed += direction.angle_to(allignment(boid_lst)) * turn_gain * alignment_weight
 		angular_speed = clamp(angular_speed, -max_angular_speed, max_angular_speed)
 	var velocity = direction.normalized() * speed
 	rotation += angular_speed * delta
@@ -57,6 +64,8 @@ func seperation(obj_lst):
 	for obj in obj_lst:
 		if (is_in_view_angle(obj)):
 			var steer_vec = Vector2(global_position.x - obj.global_position.x, global_position.y - obj.global_position.y)
+			if steer_vec.length() > separation_radius:
+				continue
 			direction_vec += steer_vec / steer_vec.length()**2
 	direction_vec /= obj_lst.size()
 	direction_vec = direction_vec.normalized()

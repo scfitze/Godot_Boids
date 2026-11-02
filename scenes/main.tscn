@@ -1,18 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://dnlaetyjcdf0o"]
+[gd_scene load_steps=4 format=3 uid="uid://dnlaetyjcdf0o"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_0q1be"]
 [ext_resource type="PackedScene" uid="uid://8wu08nin6ekr" path="res://scenes/boid.tscn" id="2_h6bay"]
+[ext_resource type="PackedScene" uid="uid://cpbaawtvaoqcc" path="res://scenes/canvas_layer.tscn" id="3_ng6hj"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_0q1be")
 boid_scene = ExtResource("2_h6bay")
-num_boids = 50
-is_seperation = true
-is_allignment = true
-is_cohesion = true
+num_boids = 300
 
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -550.0
-offset_right = 2355.0
-offset_bottom = 3034.0
-color = Color(0.0941176, 0.0941176, 0.0941176, 1)
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.780392, 0.545098, 0.129412, 1)
+
+[node name="CanvasLayer" parent="." instance=ExtResource("3_ng6hj")]
+
+[connection signal="allignemnt" from="CanvasLayer" to="." method="_on_canvas_layer_allignemnt"]
+[connection signal="cohesion" from="CanvasLayer" to="." method="_on_canvas_layer_cohesion"]
+[connection signal="seperation" from="CanvasLayer" to="." method="_on_canvas_layer_seperation"]
