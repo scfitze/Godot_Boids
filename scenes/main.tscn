@@ -1,12 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://dnlaetyjcdf0o"]
+[gd_scene load_steps=5 format=3 uid="uid://dnlaetyjcdf0o"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_0q1be"]
 [ext_resource type="PackedScene" uid="uid://8wu08nin6ekr" path="res://scenes/boid.tscn" id="2_h6bay"]
 [ext_resource type="PackedScene" uid="uid://cpbaawtvaoqcc" path="res://scenes/canvas_layer.tscn" id="3_ng6hj"]
+[ext_resource type="PackedScene" uid="uid://cim6v0wjmce14" path="res://scenes/barrier.tscn" id="4_barrier"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_0q1be")
 boid_scene = ExtResource("2_h6bay")
+barrier_scene = ExtResource("4_barrier")
 num_boids = 300
 
 [node name="Background" type="CanvasLayer" parent="."]
@@ -18,6 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.780392, 0.545098, 0.129412, 1)
 
 [node name="CanvasLayer" parent="." instance=ExtResource("3_ng6hj")]

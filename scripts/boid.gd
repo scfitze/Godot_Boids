@@ -10,6 +10,7 @@ class_name Boid
 @export var separation_weight = 1.5
 @export var alignment_weight = 1.0
 @export var cohesion_weight = 0.8
+@export var barrier_weight = 3.0
 var angular_speed = 0
 var screen_size
 
@@ -27,7 +28,13 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	var direction = Vector2.UP.rotated(rotation)
-	var boid_lst = get_overlapping_areas()
+	var boid_lst = []
+	var barrier_lst = []
+	for area in get_overlapping_areas():
+		if area is Boid:
+			boid_lst.append(area)
+		elif area.is_in_group("barrier"):
+			barrier_lst.append(area)
 	if !boid_lst.is_empty():
 		if is_seperation:
 			angular_speed += direction.angle_to(seperation(boid_lst)) * turn_gain * separation_weight
@@ -35,7 +42,9 @@ func _process(delta):
 			angular_speed += direction.angle_to(cohesion(boid_lst)) * turn_gain * cohesion_weight
 		if is_allignment:
 			angular_speed += direction.angle_to(allignment(boid_lst)) * turn_gain * alignment_weight
-		angular_speed = clamp(angular_speed, -max_angular_speed, max_angular_speed)
+	if !barrier_lst.is_empty():
+		angular_speed += direction.angle_to(avoid_barriers(barrier_lst)) * turn_gain * barrier_weight
+	angular_speed = clamp(angular_speed, -max_angular_speed, max_angular_speed)
 	var velocity = direction.normalized() * speed
 	rotation += angular_speed * delta
 	position += velocity * delta
@@ -71,6 +80,15 @@ func seperation(obj_lst):
 	direction_vec = direction_vec.normalized()
 	return direction_vec
 	
+# Steer away from barriers ahead, weighting closer ones more (1/distance^2)
+func avoid_barriers(barrier_lst):
+	var direction_vec = Vector2(0,0)
+	for barrier in barrier_lst:
+		if (is_in_view_angle(barrier)):
+			var steer_vec = global_position - barrier.global_position
+			direction_vec += steer_vec / steer_vec.length_squared()
+	return direction_vec.normalized()
+
 func cohesion(obj_lst):
 	var direction_vec = Vector2(0,0)
 	# Get vector from boid to target and divide by distance^2

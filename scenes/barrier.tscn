@@ -4,7 +4,7 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2oms3"]
 
-[node name="barrier" type="Area2D"]
+[node name="barrier" type="Area2D" groups=["barrier"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(8.26749, 7.78574)
