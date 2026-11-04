@@ -62,7 +62,8 @@ func allignment(boid_lst):
 	var vec_sum = Vector2(0,0)
 	for boid in boid_lst:
 		if (is_in_view_angle(boid)):
-			vec_sum += Vector2(sin(boid.global_rotation), cos(boid.global_rotation))
+			# Heading must match `direction` in _process: Vector2.UP rotated by the boid's rotation
+			vec_sum += Vector2.UP.rotated(boid.global_rotation)
 	vec_sum /= boid_lst.size()
 	vec_sum = vec_sum.normalized()
 	return vec_sum
